@@ -1,0 +1,11 @@
+package ChatRoom;
+
+import java.sql.SQLException;
+
+public class TestChatRoom {
+	public static void main(String args[]) throws SQLException
+	{
+		HomePage homepage=new HomePage();
+		homepage.init();
+	}
+}

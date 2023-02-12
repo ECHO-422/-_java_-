@@ -1,0 +1,20 @@
+INDEX VERSION 1.131+D:\大三上\JAVA\19318211-李玉琪-JAVA大实验\java大实验第一版\.metadata\.plugins\org.eclipse.jdt.core
+4096482554.index
+285566860.index
+2501912920.index
+3899632274.index
+3472036341.index
+2563866997.index
+1581275375.index
+2857283851.index
+170105195.index
+364446171.index
+4282076098.index
+1226514971.index
+2106530303.index
+2728104914.index
+2528636793.index
+3973528526.index
+791702845.index
+1394868265.index
+675506986.index

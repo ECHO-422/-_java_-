@@ -1,0 +1,23 @@
+INDEX VERSION 1.131+D:\大三上\JAVA\19318211-李玉琪-JAVA大实验\java大实验_聊天室实现连接数据库\.metadata\.plugins\org.eclipse.jdt.core
+3899632274.index
+170105195.index
+1394868265.index
+2728104914.index
+2501912920.index
+2563866997.index
+3472036341.index
+2528636793.index
+2857283851.index
+364446171.index
+222264148.index
+1559118954.index
+1581275375.index
+285566860.index
+4096482554.index
+675506986.index
+4197756990.index
+791702845.index
+4282076098.index
+3973528526.index
+2106530303.index
+2385965800.index

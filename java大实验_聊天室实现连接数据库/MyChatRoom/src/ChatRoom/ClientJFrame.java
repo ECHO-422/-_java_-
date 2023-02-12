@@ -1,0 +1,281 @@
+package ChatRoom;
+import java.awt.*;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+import java.io.File;
+import java.util.List;
+
+import javax.swing.SwingWorker;
+import javax.swing.*;
+import javax.swing.JPopupMenu.Separator;
+public class ClientJFrame extends JFrame{
+	JTextArea area2,area1;
+	JLabel label;
+	JPanel Panel[];
+	String client_name[];
+	String Content="";//聊天框的内容
+	int num;//当前有多少个用户
+	String name;
+	JScrollPane scro1,scro2;
+	JButton button;
+	MyClient client;
+	@SuppressWarnings("rawtypes")
+	JComboBox combox;
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	Font x=new Font("宋体",1,16);
+	//
+	JButton btnFile=new JButton();
+	JButton btnPhone=new JButton();
+	JButton btnRemote=new JButton();
+	JButton btnVideo=new JButton();
+	JMenuItem downloadFile=new JMenuItem();
+	JLabel fileLabel=new JLabel();
+	JPopupMenu fileMenu=new JPopupMenu();
+	JPanel filePanel=new JPanel();
+	JPopupMenu.Separator jSeparator1=new JPopupMenu.Separator();
+	JToolBar jToolBar1=new JToolBar();
+	JMenuItem uploadFile=new JMenuItem();
+	JProgressBar progressBar=new JProgressBar();
+	JLabel progressLabel=new JLabel();
+	public ClientJFrame(String s[],int n,String na)
+	{
+		super(na);
+		this.num=n;
+		this.name=na;
+		this.client_name=new String[30];//最大有30
+		this.label=new JLabel("选择聊天用户");
+		this.Panel=new JPanel[5];
+		for(int i=0;i<5;i++)
+		{
+			this.Panel[i]=new JPanel();
+		}
+		//this.area2=new JTextArea(20,50);
+		//this.scro1=new JScrollPane(area2); //上面的聊天
+		this.area2=new JTextArea();
+		this.scro1=new JScrollPane();
+		this.button=new JButton("发 送");
+		//this.area1=new JTextArea(2,30);
+		//this.scro2=new JScrollPane(area1);
+		this.area1=new JTextArea();
+		this.scro2=new JScrollPane();
+		this.client=new MyClient(name);//为客户机命名
+		this.combox=new JComboBox();
+		for(int i=0;i<=n;i++)
+		{
+			this.client_name[i]=s[i];
+			System.out.println(i+" ClientJFrame:"+client_name[i]);
+			this.combox.addItem(client_name[i]);
+		}
+		(new Thread(this.client)).start();//开启客户端线程
+		init();
+		int z = (Toolkit.getDefaultToolkit().getScreenSize().width - this.getSize().width)/2;
+        int y = (Toolkit.getDefaultToolkit().getScreenSize().height - this.getSize().height)/2;
+        this.setLocation(z, y);
+	}
+	public void init()
+	{
+		
+		this.Panel[0].setLayout(new FlowLayout(FlowLayout.LEFT));
+		this.Panel[0].add(label); //标签
+		//this.Panel[1].setLayout(new FlowLayout(FlowLayout.LEFT));
+		//this.Panel[1].add(scro2);//发送框
+		//this.Panel[1].add(button);
+		this.Panel[4].setLayout(new FlowLayout(FlowLayout.LEFT));//this.Panel[4].setLayout(new FlowLayout(FlowLayout.LEFT,10,0));
+		this.combox.setPreferredSize(new Dimension(100,40));
+		this.Panel[4].add(this.combox);
+		//this.Panel[2].setLayout(new GridLayout(1,2,0,20));
+		//this.Panel[2].add(this.Panel[4]);
+		this.Panel[2].setLayout(new GridLayout(2, 1, 0, 0));
+		this.Panel[2].add(Panel[0]);
+		this.Panel[2].add(Panel[4]);
+		//this.Panel[2].add(Panel[1]);
+		//this.Panel[3].setLayout(new FlowLayout(FlowLayout.CENTER,10,10));
+		//this.Panel[3].add(scro1);
+		//Container Con=this.getContentPane();
+		//Con.add(Panel[3],"North");
+		//Con.add(Panel[0],"Center");
+		//Con.add(Panel[2],"South");
+		
+		this.area1.setFont(x);
+		this.area2.setFont(x);
+		this.label.setFont(x);
+		this.button.setFont(x);
+		//
+		uploadFile.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ChatRoom/images/upload.png"))); // NOI18N
+        uploadFile.setText("上传文件");
+        uploadFile.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                uploadFileActionPerformed(evt);
+            }
+        });
+        fileMenu.add(uploadFile);
+        
+        downloadFile.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ChatRoom/images/download.png"))); // NOI18N
+        downloadFile.setText("下载文件");
+        fileMenu.add(downloadFile);
+        //上面的聊天框
+        scro1.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "会话消息窗口", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("宋体", 1, 14)));
+		area2.setColumns(20);
+		area2.setLineWrap(true);
+		area2.setRows(5);
+		scro1.setViewportView(area2);
+		
+		scro2.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "发言窗口", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("宋体", 1, 14)));
+        area1.setColumns(20);
+        area1.setLineWrap(true);
+        area1.setRows(5);
+        scro2.setViewportView(area1);
+		//
+        jToolBar1.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+        jToolBar1.setFloatable(false);
+        jToolBar1.setRollover(true);
+
+        btnPhone.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ChatRoom/images/phone.png"))); // NOI18N
+        btnPhone.setText("语音聊天");
+        btnPhone.setToolTipText("语音聊天");
+        btnPhone.setFocusable(false);
+        btnPhone.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnPhone.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jToolBar1.add(btnPhone);
+
+        btnVideo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ChatRoom/images/video.png"))); // NOI18N
+        btnVideo.setText("视频聊天");
+        btnVideo.setToolTipText("视频聊天");
+        btnVideo.setFocusable(false);
+        btnVideo.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnVideo.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jToolBar1.add(btnVideo);
+
+        btnFile.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ChatRoom/images/file.png"))); // NOI18N
+        btnFile.setText("文件传输");
+        btnFile.setToolTipText("文件传输");
+        btnFile.setFocusable(false);
+        btnFile.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnFile.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btnFile.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+            	btnFileAction(evt);
+            }
+        });
+        jToolBar1.add(btnFile);
+
+        btnRemote.setIcon(new javax.swing.ImageIcon(getClass().getResource("/ChatRoom/images/remote.png"))); // NOI18N
+        btnRemote.setText("远程桌面");
+        btnRemote.setToolTipText("远程桌面");
+        btnRemote.setFocusable(false);
+        btnRemote.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnRemote.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jToolBar1.add(btnRemote);
+
+        fileLabel.setText("文件：");
+        
+        progressBar.setStringPainted(true);
+        
+        javax.swing.GroupLayout filePanelLayout = new javax.swing.GroupLayout(filePanel);
+        filePanel.setLayout(filePanelLayout);
+        filePanelLayout.setHorizontalGroup(
+            filePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(filePanelLayout.createSequentialGroup()
+                .addComponent(progressBar, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(progressLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 156, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(filePanelLayout.createSequentialGroup()
+                .addComponent(fileLabel)
+                .addGap(0, 0, Short.MAX_VALUE))
+        );
+        filePanelLayout.setVerticalGroup(
+            filePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, filePanelLayout.createSequentialGroup()
+                .addComponent(fileLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(filePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(progressLabel, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(progressBar, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(11, 11, 11))
+        );
+        //
+        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
+        getContentPane().setLayout(layout);
+        layout.setHorizontalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(8, 8, 8)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(scro1)
+                            .addComponent(scro2))
+                        .addGap(4, 4, 4))
+                    .addGroup(layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(filePanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(button))
+                    .addGroup(layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(jToolBar1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(Panel[2], javax.swing.GroupLayout.PREFERRED_SIZE, 152, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
+        );
+        layout.setVerticalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(Panel[2])
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jToolBar1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(scro1, javax.swing.GroupLayout.DEFAULT_SIZE, 119, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(scro2, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(button, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(filePanel, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+        );
+		pack();
+	}
+	private void btnFileAction(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnFileMousePressed
+        fileMenu.show(btnFile, evt.getX()-35, evt.getY()+40); //弹出菜单
+   }//GEN-LAST:event_btnFileMousePressed
+   //发送文件
+	
+	private void uploadFileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_uploadFileActionPerformed
+        //打开文件选择对话框
+        JFileChooser fileChooser=new JFileChooser();
+        fileChooser.setDialogTitle("选择上传文件");
+        fileChooser.setApproveButtonText("选择");
+        int choice=fileChooser.showOpenDialog(this); //显示对话框
+        if (choice==JFileChooser.APPROVE_OPTION) { //点击选择按钮           
+            File file=fileChooser.getSelectedFile();//获取文件对象
+            //启动发送文件线程
+            String dest=this.combox.getSelectedItem()+"";
+            SwingWorker<List<String>,String> sender=new FileSenderThread(file,this,name,dest);
+            sender.addPropertyChangeListener(new PropertyChangeListener() {
+				@Override
+				public void propertyChange(PropertyChangeEvent evt) {
+					// TODO Auto-generated method stub
+					if ("progress".equals(evt.getPropertyName())) {
+		                 progressBar.setValue((Integer)evt.getNewValue());
+		             }
+				}
+			});
+            
+         filePanel.setVisible(true);
+         fileLabel.setText("文件："+file.getName());
+         sender.execute(); 
+         
+        }
+    }//GEN-LAST:event_uploadFileActionPerformed
+	public void addClient(String S)
+	{
+			this.combox.addItem(S);
+	}
+	public String gettxt()
+	{
+		return client.txt;
+	}
+}

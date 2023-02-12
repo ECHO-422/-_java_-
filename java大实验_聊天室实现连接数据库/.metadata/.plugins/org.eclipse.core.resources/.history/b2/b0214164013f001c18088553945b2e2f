@@ -1,0 +1,43 @@
+package Spider;
+
+public class yqData {
+	String provinceName;
+	String current;
+	String confirmed;
+	String dead;
+	String cured;
+	public yqData() {
+		// TODO Auto-generated constructor stub
+		this.provinceName="";
+		this.current="";
+		this.confirmed="";
+		this.dead="";
+		this.cured="";
+	}
+	public void padString(int n)
+	{
+		if(this.provinceName.length() < n){
+			for(int j = this.provinceName.length(); j < n; j++){
+				this.provinceName += " ";}}
+		if(this.current.length() < n){
+			for(int j = this.current.length(); j < n; j++){
+				this.current += " ";}}
+		if(this.confirmed.length() < n){
+			for(int j = this.confirmed.length(); j < n; j++){
+				this.confirmed += " ";}}
+		if(this.dead.length() < n){
+			for(int j = this.dead.length(); j < n; j++){
+				this.dead += " ";}}
+		if(this.cured.length() < n){
+			for(int j = this.cured.length(); j < n; j++){
+				this.cured += " ";}}
+	}
+	public void set(String pn,String cur,String con,String de,String cure)
+	{
+		this.provinceName=pn;
+		this.current=cur;
+		this.confirmed=con;
+		this.dead=de;
+		this.cured=cure;
+	}
+}

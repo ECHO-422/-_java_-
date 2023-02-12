@@ -1,0 +1,204 @@
+package ChatRoom;
+
+import javax.swing.*;
+import SQL.DBHelper;
+import java.awt.*;
+public class HomePage extends JFrame{
+	JLabel Label[];
+	javax.swing.JPanel Panel[];
+	JButton Button[];
+	JTextField TextField,TextField1;
+	Server server;
+	OpenServerAction action1;
+	ServerJFrame SJ;
+	CloseServerAction action2;
+	static String client_name[];
+	//LoginAction action3;
+	DBHelper dbhelper;
+	//RegisterAction register;
+	LoginJFrame LJFrame;
+	JTextField txtHostName = new javax.swing.JTextField();
+	JTextField  txtHostPort = new javax.swing.JTextField();
+	JPanel yqPanel[];
+	public javax.swing.JTextArea txtArea;
+	private javax.swing.JScrollPane jScrollPane1;
+	public HomePage()
+	{
+		super("主页");
+		this.Label=new JLabel[5];
+		this.Panel=new JPanel[8];
+		this.Button=new JButton[4];
+		this.TextField=new JTextField(15);
+		this.TextField1=new JTextField(15);
+		txtArea=new JTextArea();
+		jScrollPane1 = new javax.swing.JScrollPane();
+		this.dbhelper=new DBHelper("");
+		this.yqPanel=new JPanel[6];
+		for(int i=0;i<5;i++)
+		{
+			this.Label[i]=new JLabel();
+			this.yqPanel[i]=new JPanel();
+			Label[i].setFont(new Font("宋体", 1, 14));
+		}
+		this.yqPanel[5]=new JPanel();
+		for(int i=0;i<8;i++)
+		{
+			this.Panel[i]=new JPanel();
+		}
+		for(int i=0;i<4;i++)//加一个按钮
+		{
+			this.Button[i]=new JButton();
+			Button[i].setFont(new Font("宋体", 1, 14));
+		}
+		this.Button[0].setLabel("开启");
+		this.Button[1].setLabel("关闭");
+		this.Button[2].setLabel("登陆");
+		this.Button[3].setLabel("用户入口");
+		this.Label[0].setText("欢迎来到聊天室！");
+		this.Label[1].setText("输入用户名");
+		this.Label[2].setText("请输入密码");
+		this.Label[3].setText("主机名");
+		this.Label[4].setText("端口");
+		txtHostName.setText("127.0.0.1");
+		txtHostPort.setText("8080");
+		txtHostPort.setFont(new java.awt.Font("宋体", 1, 14));
+		txtHostName.setFont(new java.awt.Font("宋体", 1, 14));
+		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		this.server=new Server();
+		this.SJ=new ServerJFrame(server);
+		this.action1=new OpenServerAction(this);
+		this.Button[0].addActionListener(action1);//开启服务器的事件
+		this.action2=new CloseServerAction(this);
+		this.Button[1].addActionListener(action2);//关闭服务器的事件
+		this.LJFrame=new LoginJFrame(dbhelper, server);
+		client_name=new String[30]; //最多可以有三十个用户
+		client_name[0]="All";
+		//this.action3=new LoginAction(this);
+		//this.Button[2].addActionListener(action3);
+	//	this.helper=new DBHelper("");
+		//this.register=new RegisterAction(this);
+		//this.Button[3].addActionListener(register);
+	}
+	public void init()
+	{
+		this.Panel[0].setLayout(new FlowLayout(FlowLayout.CENTER,10,30));
+		this.Panel[0].add(this.Label[0]); //设置标题
+		this.Panel[1].setLayout(new GridLayout(2,1,20,20));
+		this.Panel[1].add(this.Button[0]);//加按钮
+		this.Panel[1].add(this.Button[1]);
+		//this.Panel[1].add(this.Button[3]);
+		this.Panel[2].add(this.Panel[1]);
+		Panel[2].setBorder(javax.swing.BorderFactory.createTitledBorder(null, "启动服务器", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("宋体", 1, 14))); // NOI18N
+		//
+		javax.swing.GroupLayout topPanelLayout = new javax.swing.GroupLayout(Panel[2]);
+	       Panel[2].setLayout(topPanelLayout);
+	        topPanelLayout.setHorizontalGroup(
+	            topPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+	            .addGroup(topPanelLayout.createSequentialGroup()
+	                .addContainerGap()
+	                .addComponent(Label[3], javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+	                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+	                .addComponent(txtHostName, javax.swing.GroupLayout.DEFAULT_SIZE, 180, Short.MAX_VALUE)
+	                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+	                .addComponent(Label[4], javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+	                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+	                .addComponent(txtHostPort, javax.swing.GroupLayout.DEFAULT_SIZE, 78, Short.MAX_VALUE)
+	                .addGap(49, 49, 49)
+	                .addComponent(Button[0], javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+	                .addGap(49, 49, 49)
+	                .addComponent(Button[1], javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+	                .addContainerGap())
+	            	
+	        );
+	        topPanelLayout.setVerticalGroup(
+	            topPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+	            .addGroup(topPanelLayout.createSequentialGroup()
+	                .addGap(15, 15, 15)
+	                .addGroup(topPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+	                    .addComponent(Label[3])
+	                    .addComponent(txtHostName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+	                    .addComponent(Label[4])
+	                    .addComponent(txtHostPort, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+	                    .addComponent(Button[0])
+	                    .addComponent(Button[1]))
+	                .addContainerGap(20, Short.MAX_VALUE))
+	        );
+	    Panel[3].setBorder(javax.swing.BorderFactory.createTitledBorder(null, "用户登录", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("宋体", 1, 14))); // NOI18N
+	    Panel[3].setLayout(new FlowLayout(FlowLayout.CENTER,50,10));
+	    Panel[3].add(Button[3]);    
+	    //  
+	    yqPanel[0].setBackground(Color.BLUE);
+	    yqPanel[1].setBackground(Color.PINK);
+	    yqPanel[2].setBackground(Color.RED);
+	    yqPanel[3].setBackground(Color.CYAN);
+	    yqPanel[4].setBackground(Color.GREEN);
+	    yqPanel[5].setLayout(new GridLayout(1,5));
+	    Panel[7].add(jScrollPane1);
+	    for(int i=0;i<5;i++)
+	    	{	yqPanel[i].setLayout(new FlowLayout(FlowLayout.CENTER));
+	    		yqPanel[5].add(yqPanel[i]);	    	
+	    	}
+	    Panel[4].setBorder(javax.swing.BorderFactory.createTitledBorder(null, "国内疫情", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("宋体", 1, 14))); // NOI18N
+
+        txtArea.setColumns(20);
+        txtArea.setFont(new java.awt.Font("宋体", 1, 16)); // NOI18N
+        txtArea.setLineWrap(true);
+        txtArea.setRows(5);
+        jScrollPane1.setViewportView(txtArea);
+
+        /*javax.swing.GroupLayout midPanelLayout = new javax.swing.GroupLayout(Panel[4]);
+        Panel[4].setLayout(midPanelLayout);
+        midPanelLayout.setHorizontalGroup(
+        midPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING)
+        );
+        midPanelLayout.setVerticalGroup(
+        midPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, midPanelLayout.createSequentialGroup()
+        .addContainerGap()
+        .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 299, Short.MAX_VALUE))
+        );*/
+        Panel[4].setLayout(new BorderLayout(0, 5));
+        Panel[4].add("North",  yqPanel[5]);
+        Panel[4].add("Center",jScrollPane1);
+	    
+	    
+	    //
+	    javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
+	    getContentPane().setLayout(layout);
+	    layout.setHorizontalGroup(
+	    layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+	    .addGroup(layout.createSequentialGroup()
+	    .addContainerGap()
+	    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+	    .addComponent(Panel[2], javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+	    .addComponent(Panel[3], javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+	    .addComponent(Panel[4], javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+	    .addContainerGap())
+	    );
+	        layout.setVerticalGroup(
+	            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+	            .addGroup(layout.createSequentialGroup()
+	                .addContainerGap()
+	                .addComponent(Panel[2], javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+	                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+	                .addComponent(Panel[3], javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+	                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+	                .addComponent(Panel[4], javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+	        );
+		//Con.add(this.Panel[5],"South");
+	    Button[3].addActionListener(new java.awt.event.ActionListener() {
+	    	 public void actionPerformed(java.awt.event.ActionEvent evt) {
+	                btnPerformed(evt);
+	            }
+	    });
+		this.setSize(600, 480);
+		this.setVisible(true);
+	}
+	//新建窗口
+	public void btnPerformed(java.awt.event.ActionEvent evt)
+	{
+		LoginJFrame Le=new LoginJFrame(dbhelper, server);
+		Le.setVisible(true);
+	}
+}
